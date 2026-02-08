@@ -2,66 +2,129 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Bet30 VIP - Raspadita Premium</title>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <style>
 :root{--gold:#d4af37;--pink:#ff3399;}
+
 html,body{
-    margin:0;height:100%;font-family:'Segoe UI',sans-serif;
-    background:#000;overflow:hidden;
+    margin:0;
+    height:100%;
+    font-family:'Segoe UI',sans-serif;
+    background:#000;
+    overflow:hidden;
+    overscroll-behavior:none;
+    touch-action:none;
 }
+
+/* FONDO CASINO */
 .background{
-    position:fixed;inset:0;
+    position:fixed;
+    inset:0;
     background:url('https://images.unsplash.com/photo-1606166325683-e1e2e6a3b7fa?q=80&w=2070') center/cover no-repeat;
-    filter:brightness(.35);z-index:-1;
+    filter:brightness(.35);
+    z-index:-1;
 }
+
+/* GANADORES */
 .top-winners{
-    position:absolute;top:0;width:100%;
+    position:absolute;
+    top:0;
+    width:100%;
     background:rgba(0,0,0,.85);
     border-bottom:1px solid var(--gold);
-    padding:10px;color:#f1c40f;
-    display:flex;justify-content:center;gap:30px;
-    font-size:13px;font-weight:700;
+    padding:10px;
+    color:#f1c40f;
+    display:flex;
+    justify-content:center;
+    gap:25px;
+    font-size:13px;
+    font-weight:700;
+    z-index:10;
 }
+
+/* CONTENEDOR */
 .main-container{
-    height:100vh;display:flex;
-    flex-direction:column;justify-content:center;align-items:center;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
 }
+
+/* LOGO */
 .logo-area{text-align:center;margin-bottom:30px;}
-.logo-area h1{color:#fff;font-size:65px;font-weight:900;margin:0;}
+.logo-area h1{
+    color:#fff;
+    font-size:60px;
+    font-weight:900;
+    margin:0;
+}
 .logo-area h1 span{color:var(--pink);font-style:italic;font-weight:300;}
 .logo-area p{color:var(--gold);letter-spacing:5px;font-weight:700;}
 
+/* TARJETA */
 .card-frame{
-    padding:12px;background:#1a1a1a;
+    padding:12px;
+    background:#1a1a1a;
     border:3px solid var(--gold);
-    border-radius:40px;box-shadow:0 0 40px var(--pink);
-    width:480px;height:260px;
+    border-radius:40px;
+    box-shadow:0 0 40px var(--pink);
+    width:480px;
+    height:260px;
+    max-width:90vw;
 }
-.card-inner{
-    width:100%;height:100%;border-radius:30px;
-    background:#000 url('https://www.transparenttextures.com/patterns/dark-leather.png');
-    display:flex;align-items:center;justify-content:center;
-    position:relative;overflow:hidden;
-}
-.prize-value{color:var(--gold);font-size:85px;font-weight:900;}
-#scratch-canvas{position:absolute;inset:0;cursor:crosshair;}
 
-#win-modal,#block-modal{
-    display:none;position:fixed;inset:0;
-    background:rgba(0,0,0,.95);
-    z-index:100;justify-content:center;align-items:center;
+.card-inner{
+    width:100%;
+    height:100%;
+    border-radius:30px;
+    background:#000 url('https://www.transparenttextures.com/patterns/dark-leather.png');
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    overflow:hidden;
 }
+
+.prize-value{
+    color:var(--gold);
+    font-size:80px;
+    font-weight:900;
+}
+
+#scratch-canvas{
+    position:absolute;
+    inset:0;
+    cursor:crosshair;
+    touch-action:none;
+}
+
+/* MODALES */
+#win-modal,#block-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.95);
+    z-index:100;
+    justify-content:center;
+    align-items:center;
+}
+
 .modal-content{
-    background:#111;border:2px solid var(--gold);
-    border-radius:30px;padding:50px;text-align:center;
+    background:#111;
+    border:2px solid var(--gold);
+    border-radius:30px;
+    padding:45px;
+    text-align:center;
     box-shadow:0 0 60px var(--pink);
 }
-.modal-content h2{color:var(--pink);font-size:38px;}
-.modal-content .big-num{color:#fff;font-size:80px;font-weight:900;}
+
+.modal-content h2{color:var(--pink);font-size:36px;}
+.modal-content .big-num{color:#fff;font-size:75px;font-weight:900;}
 .modal-content p{color:var(--gold);font-size:16px;}
 </style>
 </head>
@@ -134,7 +197,7 @@ prizeText.innerText = hasPrize ? "5.000" : "SIN PREMIO";
 
 function init(){
     ctx.globalCompositeOperation="source-over";
-    ctx.fillStyle="#bbb";
+    ctx.fillStyle="#bfc3c7";
     ctx.fillRect(0,0,480,260);
     ctx.fillStyle="rgba(0,0,0,.35)";
     ctx.font="bold 32px Arial";
@@ -193,15 +256,35 @@ function reveal(){
 
 function genCode(){
     const l="ABCDEFGHIJKLMNOPQRSTUVWXYZ",n="0123456789";
-    let c="";for(let i=0;i<4;i++)c+=l[Math.floor(Math.random()*l.length)];
-    for(let i=0;i<3;i++)c+=n[Math.floor(Math.random()*n.length)];
+    let c="";
+    for(let i=0;i<4;i++) c+=l[Math.floor(Math.random()*l.length)];
+    for(let i=0;i<3;i++) c+=n[Math.floor(Math.random()*n.length)];
     return c;
 }
 
+/* EVENTOS PC */
 canvas.addEventListener("mousedown",e=>{drawing=true;scratch(e);});
-canvas.addEventListener("touchstart",e=>{drawing=true;scratch(e);});
-window.addEventListener("mouseup",()=>{drawing=false;lastX=null;});
 canvas.addEventListener("mousemove",scratch);
+window.addEventListener("mouseup",()=>{drawing=false;lastX=null;});
+
+/* EVENTOS MOBILE FIX */
+canvas.addEventListener("touchstart",e=>{
+    e.preventDefault();
+    drawing=true;
+    scratch(e);
+},{passive:false});
+
+canvas.addEventListener("touchmove",e=>{
+    e.preventDefault();
+    scratch(e);
+},{passive:false});
+
+canvas.addEventListener("touchend",e=>{
+    e.preventDefault();
+    drawing=false;
+    lastX=null;lastY=null;
+},{passive:false});
+
 init();
 </script>
 
