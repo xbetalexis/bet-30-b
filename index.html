@@ -3,40 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Joker's Gold Scratch - Bet30 Exclusive</title>
+    <title>VIP Gold Scratch - Bet30</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --bet-pink: #ff0055;
             --bet-gold: #ffcc00;
-            --dark-overlay: rgba(0, 0, 0, 0.75);
-            --neon-pink: 0 0 20px #ff0055, 0 0 40px #ff0055;
+            --neon-glow: 0 0 20px rgba(255, 0, 85, 0.6);
         }
 
         body, html {
             margin: 0; padding: 0;
             height: 100%; width: 100%;
-            font-family: 'Verdana', sans-serif;
+            font-family: 'Arial', sans-serif;
             overflow: hidden;
-            background-color: #000;
+            background: #000;
         }
 
-        /* --- VIDEO DE FONDO --- */
-        #video-bg {
+        /* FONDO DE IMAGEN CASINO REAL */
+        .casino-bg {
             position: fixed;
-            right: 0; bottom: 0;
-            min-width: 100%; min-height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://images.unsplash.com/photo-1596838132731-3301c3fd4317?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.4) blur(4px);
             z-index: -1;
-            filter: blur(3px) brightness(0.6);
-            object-fit: cover;
+            transform: scale(1.1); /* Evita bordes blancos por el blur */
         }
 
-        /* --- CAPA DE DISEÑO --- */
         .overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, transparent 20%, var(--dark-overlay) 80%);
+            background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.8) 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -44,253 +44,228 @@
             z-index: 1;
         }
 
-        /* MARQUESINA DE GANADORES PROFESIONAL */
-        .live-ticker {
-            position: absolute;
-            top: 0; width: 100%;
-            background: rgba(0,0,0,0.8);
-            border-bottom: 2px solid var(--bet-gold);
-            padding: 8px 0;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-
-        .ticker-move {
-            display: inline-block;
-            animation: ticker 25s linear infinite;
-            color: #fff;
-            font-weight: bold;
-            font-size: 13px;
-            text-transform: uppercase;
-        }
-
-        .ticker-move span { margin-right: 60px; display: inline-flex; align-items: center; gap: 8px; }
-        .ticker-move b { color: var(--bet-gold); }
-
-        @keyframes ticker { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
-
-        /* HEADER ESTILO JOKER */
+        /* HEADER */
         .brand-header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         .brand-header h1 {
-            font-size: 50px;
+            font-size: 55px;
             color: #fff;
             margin: 0;
-            text-shadow: var(--neon-pink);
-            letter-spacing: -2px;
+            text-shadow: 0 0 15px var(--bet-pink);
             font-style: italic;
+            font-weight: 900;
         }
 
-        /* --- LA RASPADITA (EL PREMIO) --- */
-        .scratch-wrapper {
+        /* RASPADITA OPTIMIZADA */
+        .scratch-card {
             position: relative;
-            width: 400px;
-            height: 220px;
-            padding: 10px;
-            background: linear-gradient(145deg, #222, #000);
-            border-radius: 25px;
+            width: 380px;
+            height: 200px;
+            border-radius: 20px;
             border: 4px solid var(--bet-gold);
-            box-shadow: 0 0 50px rgba(255, 0, 85, 0.4);
+            box-shadow: 0 0 40px rgba(255, 0, 85, 0.5);
+            background: #111;
+            overflow: hidden;
         }
 
-        .inner-prize {
+        .prize-content {
+            position: absolute;
             width: 100%; height: 100%;
-            background: #111;
-            border-radius: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            position: relative;
-            background: url('https://www.transparenttextures.com/patterns/black-linen.png');
+            background: url('https://www.transparenttextures.com/patterns/dark-leather.png');
+            text-align: center;
         }
 
-        .inner-prize h3 { color: #555; font-size: 18px; margin: 0; }
-        .inner-prize .win-text { 
+        .prize-content h2 { color: #444; font-size: 20px; text-transform: uppercase; }
+        .win-value { 
             color: var(--bet-gold); 
-            font-size: 45px; 
+            font-size: 50px; 
             font-weight: 900; 
             display: none; 
-            animation: scaleIn 0.5s ease-out;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
         }
-
-        @keyframes scaleIn { from { transform: scale(0.5); } to { transform: scale(1); } }
 
         #canvas {
             position: absolute;
-            top: 10px; left: 10px;
-            border-radius: 15px;
+            top: 0; left: 0;
             z-index: 10;
-            cursor: pointer;
-            touch-action: none;
+            cursor: crosshair;
+            touch-action: none; /* Crucial para móviles */
         }
 
-        /* --- MODAL DE VICTORIA VIP --- */
-        #vipModal {
+        /* MODAL GANADOR */
+        #winModal {
             display: none;
             position: fixed;
             top:0; left:0; width:100%; height:100%;
             background: rgba(0,0,0,0.95);
-            z-index: 9999;
+            z-index: 1000;
             justify-content: center;
             align-items: center;
         }
 
-        .vip-content {
-            background: linear-gradient(to bottom, #1a1a1a, #000);
-            padding: 60px;
-            border-radius: 40px;
+        .win-box {
+            background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);
+            padding: 50px;
+            border-radius: 30px;
             border: 3px solid var(--bet-gold);
             text-align: center;
-            box-shadow: 0 0 100px var(--bet-pink);
+            box-shadow: 0 0 60px var(--bet-pink);
         }
 
-        .vip-content h2 { color: var(--bet-pink); font-size: 20px; letter-spacing: 5px; margin: 0; }
-        .vip-content h1 { color: #fff; font-size: 70px; margin: 10px 0; }
-        .vip-content .fichas { color: var(--bet-gold); font-size: 30px; margin-bottom: 30px; }
-        .vip-content button {
+        .win-box h1 { font-size: 70px; color: #fff; margin: 10px 0; }
+        .win-box button {
             background: var(--bet-gold);
-            color: #000; border: none; padding: 18px 50px;
-            border-radius: 10px; font-weight: 900; font-size: 18px; cursor: pointer;
-            transition: 0.3s;
+            color: #000; border: none; padding: 15px 40px;
+            border-radius: 10px; font-weight: 900; cursor: pointer;
+            margin-top: 20px; font-size: 18px;
         }
-        .vip-content button:hover { transform: scale(1.1); background: #fff; }
-
     </style>
 </head>
 <body>
 
-    <video autoplay muted loop id="video-bg">
-        <source src="https://static.videezy.com/system/resources/previews/000/038/542/original/Spinning_Slot_Machine_Reels.mp4" type="video/mp4">
-    </video>
+    <div class="casino-bg"></div>
 
     <div class="overlay">
-        
-        <div class="live-ticker">
-            <div class="ticker-move" id="ticker">
-                </div>
-        </div>
-
         <div class="brand-header">
             <h1>BET<span>30</span> VIP</h1>
-            <p style="color: var(--bet-gold); font-weight: bold; margin-top: 5px;">EXCLUSIVE REWARDS</p>
+            <p style="color: var(--bet-gold); font-weight: bold; letter-spacing: 2px;">PREMIO EXCLUSIVO</p>
         </div>
 
-        <div class="scratch-wrapper">
-            <div class="inner-prize">
-                <h3 id="labelTry">SUERTE PRÓXIMA</h3>
-                <div class="win-text" id="winValue">5.000</div>
+        <div class="scratch-card">
+            <div class="prize-content">
+                <h2 id="msg">¡SIGUE RASPANDO!</h2>
+                <div class="win-value" id="val">5.000</div>
             </div>
-            <canvas id="canvas" width="400" height="220"></canvas>
+            <canvas id="canvas" width="380" height="200"></canvas>
         </div>
-
     </div>
 
-    <div id="vipModal">
-        <div class="vip-content">
-            <h2>¡GANANCIA ÉPICA!</h2>
+    <div id="winModal">
+        <div class="win-box">
+            <h3 style="color:var(--bet-pink); margin:0;">JACKPOT!</h3>
             <h1>5.000</h1>
-            <div class="fichas">FICHAS NO EXTRAÍBLES</div>
-            <button onclick="closeVIP()">RECLAMAR AHORA</button>
+            <p style="color:var(--bet-gold)">FICHAS NO EXTRAÍBLES</p>
+            <button onclick="closeWin()">COBRAR PREMIO</button>
         </div>
     </div>
 
     <script>
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
-        const winValue = document.getElementById('winValue');
-        const labelTry = document.getElementById('labelTry');
-        const vipModal = document.getElementById('vipModal');
-        const ticker = document.getElementById('ticker');
+        const val = document.getElementById('val');
+        const msg = document.getElementById('msg');
+        const winModal = document.getElementById('winModal');
 
         let attempts = 0;
-        let isScraping = false;
-
-        // Generar ticker profesional
-        const users = ["Santi99", "Mari_Slots", "JokerKing", "BetMaster", "Player_777"];
-        ticker.innerHTML = users.map(u => `<span><i class="material-icons-outlined" style="color:var(--bet-pink)">verified</i> <b>${u}</b> ganó <b>$${Math.floor(Math.random()*5000)}</b></span>`).join('').repeat(10);
+        let isDrawing = false;
 
         function init() {
-            // Capa de raspado con textura metálica
-            const grad = ctx.createLinearGradient(0,0,400,220);
-            grad.addColorStop(0, '#333');
-            grad.addColorStop(0.5, '#666');
-            grad.addColorStop(1, '#222');
+            // Capa gris metalizada premium
+            const grad = ctx.createLinearGradient(0,0,380,200);
+            grad.addColorStop(0, '#444');
+            grad.addColorStop(0.5, '#888');
+            grad.addColorStop(1, '#333');
             ctx.fillStyle = grad;
-            ctx.fillRect(0,0,400,220);
+            ctx.fillRect(0,0,380,200);
 
-            // Icono del Joker en el centro del canvas
+            // Texto de ayuda
             ctx.globalCompositeOperation = 'source-over';
-            ctx.fillStyle = "rgba(255,204,0,0.3)";
-            ctx.font = "bold 80px 'Material Icons Outlined'";
+            ctx.fillStyle = "rgba(255,255,255,0.5)";
+            ctx.font = "bold 20px Arial";
             ctx.textAlign = "center";
-            ctx.fillText("casino", 200, 130);
+            ctx.fillText("RASPA RÁPIDO AQUÍ", 190, 110);
 
             ctx.globalCompositeOperation = 'destination-out';
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+            ctx.lineWidth = 45; // Raspa más área por cada movimiento
         }
 
-        function handleScratch(e) {
-            if(!isScraping) return;
+        function scratch(e) {
+            if(!isDrawing) return;
             const rect = canvas.getBoundingClientRect();
             const x = (e.clientX || e.touches[0].clientX) - rect.left;
             const y = (e.clientY || e.touches[0].clientY) - rect.top;
 
             ctx.beginPath();
-            ctx.arc(x, y, 30, 0, Math.PI*2);
-            ctx.fill();
+            // Usamos moveTo/lineTo para que el raspado sea continuo y no deje huecos
+            if (this.lastX && this.lastY) {
+                ctx.moveTo(this.lastX, this.lastY);
+                ctx.lineTo(x, y);
+            } else {
+                ctx.moveTo(x, y);
+                ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+            
+            this.lastX = x;
+            this.lastY = y;
+
             checkProgress();
         }
 
         function checkProgress() {
-            const data = ctx.getImageData(0,0,400,220).data;
-            let cleared = 0;
-            for(let i=3; i<data.length; i+=4) if(data[i] === 0) cleared++;
+            // Verificamos el progreso solo cada ciertos movimientos para no saturar
+            const data = ctx.getImageData(0,0,380,200).data;
+            let count = 0;
+            for(let i=3; i<data.length; i+=40) if(data[i] === 0) count++;
             
-            if(cleared > (400*220*0.6)) {
-                reveal();
-            }
+            // Si se raspó el 40%, revelamos
+            if(count > 150) reveal();
         }
 
         function reveal() {
-            isScraping = false;
+            if (!isDrawing) return;
+            isDrawing = false;
             attempts++;
 
             if(attempts === 20) {
-                labelTry.style.display = 'none';
-                winValue.style.display = 'block';
-                // Efectos pro
-                confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 }, colors: ['#ff0055', '#ffcc00', '#ffffff'] });
-                setTimeout(() => { vipModal.style.display = 'flex'; }, 1000);
+                msg.style.display = 'none';
+                val.style.display = 'block';
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+                setTimeout(() => { winModal.style.display = 'flex'; }, 800);
             } else {
                 setTimeout(() => {
-                    alert("Inténtalo de nuevo. ¡El gran premio está cerca!");
+                    alert("¡Casi lo tienes! Intenta de nuevo.");
                     reset();
-                }, 500);
+                }, 300);
             }
         }
 
         function reset() {
+            this.lastX = null;
+            this.lastY = null;
             ctx.globalCompositeOperation = 'source-over';
             init();
-            winValue.style.display = 'none';
-            labelTry.style.display = 'block';
+            val.style.display = 'none';
+            msg.style.display = 'block';
         }
 
-        function closeVIP() {
+        function closeWin() {
             attempts = 0;
-            vipModal.style.display = 'none';
+            winModal.style.display = 'none';
             reset();
         }
 
-        canvas.addEventListener('mousedown', () => isScraping = true);
-        canvas.addEventListener('touchstart', () => isScraping = true);
-        window.addEventListener('mouseup', () => isScraping = false);
-        window.addEventListener('touchend', () => isScraping = false);
-        canvas.addEventListener('mousemove', handleScratch);
-        canvas.addEventListener('touchmove', handleScratch);
+        canvas.addEventListener('mousedown', (e) => { isDrawing = true; scratch(e); });
+        canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); });
+        window.addEventListener('mouseup', () => { isDrawing = false; this.lastX = null; });
+        window.addEventListener('touchend', () => { isDrawing = false; this.lastX = null; });
+        canvas.addEventListener('mousemove', scratch);
+        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); scratch(e); }, {passive: false});
 
         init();
     </script>
