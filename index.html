@@ -106,7 +106,6 @@ html,body{
     font-weight:900;
 }
 
-/* CANVAS */
 #scratch-canvas{
     position:absolute;
     inset:0;
@@ -144,6 +143,10 @@ html,body{
     font-size:80px;
     font-weight:900;
 }
+.modal-content p{
+    color:var(--gold);
+    font-size:16px;
+}
 .modal-content button{
     background:linear-gradient(#f1c40f,#d4af37);
     border:none;
@@ -152,6 +155,7 @@ html,body{
     font-weight:900;
     cursor:pointer;
     font-size:18px;
+    margin-top:20px;
 }
 </style>
 </head>
@@ -175,7 +179,7 @@ html,body{
 
 <div class="card-frame">
 <div class="card-inner">
-<div class="prize-value">5.000</div>
+<div class="prize-value" id="prize-text"></div>
 <canvas id="scratch-canvas" width="480" height="260"></canvas>
 </div>
 </div>
@@ -183,21 +187,30 @@ html,body{
 
 <div id="win-modal">
 <div class="modal-content">
-<h2>¡GANANCIA ÉPICA!</h2>
+<h2>¡GANASTE!</h2>
 <div class="big-num">5.000</div>
-<p style="color:var(--gold)">FICHAS NO EXTRAÍBLES</p>
-<button onclick="closeWin()">COBRAR PREMIO</button>
+<p id="win-info"></p>
+<button onclick="closeWin()">ACEPTAR</button>
 </div>
 </div>
 
 <script>
 const canvas = document.getElementById("scratch-canvas");
 const ctx = canvas.getContext("2d");
+const prizeText = document.getElementById("prize-text");
 const winModal = document.getElementById("win-modal");
+const winInfo = document.getElementById("win-info");
 
-let attempts = 0;
-let drawing = false;
-let finished = false;
+let drawing=false, finished=false, lastX=null, lastY=null;
+
+/* 1 ganador cada 20 */
+const hasPrize = Math.floor(Math.random()*20) === 0;
+
+const prizeAmount = "5.000";
+const prizeCode = generateCode();
+const prizeDate = new Date().toLocaleString("es-AR");
+
+prizeText.innerText = hasPrize ? prizeAmount : "SIN PREMIO";
 
 function init(){
     finished=false;
@@ -208,12 +221,10 @@ function init(){
     g.addColorStop(1,"#6c757d");
     ctx.fillStyle=g;
     ctx.fillRect(0,0,480,260);
-
-    ctx.fillStyle="rgba(0,0,0,.3)";
-    ctx.font="bold 35px Arial";
+    ctx.fillStyle="rgba(0,0,0,.35)";
+    ctx.font="bold 32px Arial";
     ctx.textAlign="center";
     ctx.fillText("RASPA AQUÍ",240,145);
-
     ctx.globalCompositeOperation="destination-out";
     ctx.lineWidth=45;
     ctx.lineCap="round";
@@ -224,57 +235,51 @@ function scratch(e){
     const r=canvas.getBoundingClientRect();
     const x=(e.clientX||e.touches[0].clientX)-r.left;
     const y=(e.clientY||e.touches[0].clientY)-r.top;
-
     ctx.beginPath();
     ctx.moveTo(lastX||x,lastY||y);
     ctx.lineTo(x,y);
     ctx.stroke();
     lastX=x; lastY=y;
-
     checkProgress();
 }
 
 function checkProgress(){
-    const img=ctx.getImageData(0,0,480,260);
+    const img=ctx.getImageData(0,0,480,260).data;
     let cleared=0;
-    for(let i=3;i<img.data.length;i+=4){
-        if(img.data[i]===0) cleared++;
+    for(let i=3;i<img.length;i+=4){
+        if(img[i]===0) cleared++;
     }
-    const percent = cleared / (img.data.length/4);
-
-    if(percent >= 0.60){
+    if(cleared/(img.length/4)>=0.6){
         finished=true;
-        finishAttempt();
+        revealResult();
     }
 }
 
-function finishAttempt(){
-    attempts++;
-    if(attempts===20){
-        canvas.style.opacity="0";
-        confetti({particleCount:220,spread:100,origin:{y:.6}});
-        setTimeout(()=>winModal.style.display="flex",700);
+function revealResult(){
+    canvas.style.opacity="0";
+    if(hasPrize){
+        confetti({particleCount:300,spread:120,origin:{y:.6}});
+        winInfo.innerHTML=`FICHAS NO EXTRAÍBLES<br><br>
+        <b>Fecha:</b> ${prizeDate}<br>
+        <b>Código:</b> ${prizeCode}`;
+        setTimeout(()=>winModal.style.display="flex",600);
     }else{
-        setTimeout(()=>{
-            alert("No hay premio esta vez. Probá de nuevo.");
-            reset();
-        },300);
+        setTimeout(()=>alert("No hubo premio esta vez. Seguí participando."),400);
     }
-}
-
-function reset(){
-    lastX=null; lastY=null;
-    canvas.style.opacity="1";
-    init();
 }
 
 function closeWin(){
-    attempts=0;
     winModal.style.display="none";
-    reset();
 }
 
-let lastX,lastY;
+function generateCode(){
+    const l="ABCDEFGHIJKLMNOPQRSTUVWXYZ", n="0123456789";
+    let c="";
+    for(let i=0;i<4;i++) c+=l[Math.floor(Math.random()*l.length)];
+    for(let i=0;i<3;i++) c+=n[Math.floor(Math.random()*n.length)];
+    return c;
+}
+
 canvas.addEventListener("mousedown",e=>{drawing=true;scratch(e);});
 canvas.addEventListener("touchstart",e=>{drawing=true;scratch(e);});
 window.addEventListener("mouseup",()=>{drawing=false;lastX=null;});
