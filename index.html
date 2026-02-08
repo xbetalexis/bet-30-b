@@ -3,217 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bet30 - Suerte Navideña</title>
+    <title>Raspadita Bet30 - Suerte Navideña</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <style>
         :root {
             --bet-blue: #0a0b1e;
-            --bet-footer: #11142b;
             --bet-pink: #e91e63;
             --bet-gold: #ffc107;
+            --card-gray: #1a1c3a;
         }
 
         body {
             font-family: 'Arial', sans-serif;
-            margin: 0;
             background-color: var(--bet-blue);
             color: white;
-            overflow-x: hidden;
-        }
-
-        /* --- NAVBAR SUPERIOR --- */
-        header {
-            background-color: var(--bet-blue);
-            padding: 10px 20px;
+            margin: 0;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            min-height: 100vh;
         }
 
-        .logo {
-            font-size: 32px;
-            font-weight: 900;
-            color: #ffffff;
-            text-decoration: none;
+        header {
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
         }
+
+        .logo { font-size: 32px; font-weight: 900; text-decoration: none; color: white; }
         .logo span { color: var(--bet-pink); }
 
-        .nav-center {
-            display: flex;
-            gap: 20px;
-        }
-
-        .nav-link {
-            text-decoration: none;
-            color: white;
-            text-transform: uppercase;
-            font-size: 14px;
-            font-weight: bold;
-            padding: 5px 10px;
-        }
-        .nav-link.active {
-            border-bottom: 2px solid var(--bet-pink);
-            color: var(--bet-pink);
-        }
-
-        .btn-acceso {
-            background-color: var(--bet-pink);
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-
-        /* --- BANNER PRINCIPAL --- */
-        .hero-banner {
-            width: 100%;
-            height: 450px;
-            background: linear-gradient(to right, rgba(10,11,30,0.8), rgba(10,11,30,0.2)), 
-                        url('https://img.freepik.com/premium-photo/christmas-gifts-poker-cards-chips-blue-background_175880-1412.jpg');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
+        .game-container {
             position: relative;
+            width: 320px;
+            height: 180px;
+            background: var(--card-gray);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 2px solid var(--bet-pink);
         }
 
-        .hero-banner h1 {
-            font-size: 80px;
-            margin: 0;
-            line-height: 0.9;
-            text-transform: uppercase;
-        }
-        .hero-banner .pink-text {
-            color: var(--bet-pink);
-            font-size: 60px;
-        }
-        .hero-banner p {
-            font-size: 18px;
-            margin-top: 10px;
-            letter-spacing: 1px;
-        }
-
-        /* --- MENÚ DE CATEGORÍAS (ICONOS BLANCOS) --- */
-        .category-bar {
-            background-color: #050614;
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 0;
-            border-bottom: 2px solid #1a1c3a;
-        }
-
-        .cat-item {
+        /* El premio que está debajo */
+        .prize-under {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            color: white;
-            text-decoration: none;
-            font-size: 12px;
-            opacity: 0.8;
-        }
-        .cat-item:hover, .cat-item.active {
-            opacity: 1;
-            color: var(--bet-pink);
-        }
-        .cat-item .material-icons-outlined {
-            font-size: 30px;
-            margin-bottom: 5px;
-        }
-
-        /* --- BARRA DE PROVEEDORES (ABAJO) --- */
-        .providers-bar {
-            background-color: var(--bet-footer);
-            padding: 15px 10px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            overflow-x: auto;
-            white-space: nowrap;
-        }
-
-        .provider-logo {
-            height: 30px;
-            filter: grayscale(1) brightness(2);
-            opacity: 0.6;
-            transition: 0.3s;
-        }
-        .provider-logo:hover {
-            filter: none;
-            opacity: 1;
-        }
-
-        /* --- BOTÓN FLOTANTE CHAT --- */
-        .chat-float {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #5c6bc0;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            cursor: pointer;
+            align-items: center;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .prize-under h2 { margin: 0; font-size: 24px; color: var(--bet-gold); }
+        .prize-under p { margin: 5px 0 0; font-size: 14px; opacity: 0.8; }
+
+        /* Capa de raspado */
+        #scratchCanvas {
+            position: absolute;
+            top: 0; left: 0;
+            z-index: 2;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        .stats {
+            margin-top: 25px;
+            background: rgba(255,255,255,0.05);
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+        }
+
+        #attemptsDisplay { color: var(--bet-pink); }
+
+        /* Modal Ganador */
+        #winModal {
+            display: none;
+            position: fixed;
+            top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .modal-card {
+            background: white;
+            color: black;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 300px;
+        }
+
+        .modal-card h2 { color: var(--bet-pink); margin-top: 0; }
+        .modal-card .chips { font-size: 40px; font-weight: bold; margin: 10px 0; }
+        .modal-card button {
+            background: var(--bet-blue);
+            color: white; border: none; padding: 10px 20px;
+            border-radius: 5px; cursor: pointer; font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <a href="#" class="logo">Bet<span>30</span></a>
-        <div class="nav-center">
-            <a href="#" class="nav-link active">Inicio</a>
-            <a href="#" class="nav-link">Casino</a>
-        </div>
-        <button class="btn-acceso">Acceso</button>
-    </header>
+<header>
+    <a href="#" class="logo">Bet<span>30</span> Raspadita</a>
+</header>
 
-    <section class="hero-banner">
-        <div style="color:var(--bet-pink); font-weight:bold; font-size: 40px;">Bet<span>30</span></div>
-        <h1>SUERTE</h1>
-        <h1 class="pink-text">NAVIDEÑA ON</h1>
-        <p>JUGÁ, GANÁ Y REPETÍ LA MAGIA FESTIVA</p>
-    </section>
-
-    <nav class="category-bar">
-        <a href="#" class="cat-item active">
-            <span class="material-icons-outlined">home</span>
-            Lobby
-        </a>
-        <a href="#" class="cat-item">
-            <span class="material-icons-outlined">workspace_premium</span>
-            Jokers
-        </a>
-        <a href="#" class="cat-item">
-            <span class="material-icons-outlined">local_fire_department</span>
-            Hot
-        </a>
-        <a href="#" class="cat-item">
-            <span class="material-icons-outlined">casino</span>
-            Megaways
-        </a>
-    </nav>
-
-    <div class="providers-bar">
-        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/5a/Pragmatic_Play_logo.svg/1200px-Pragmatic_Play_logo.svg.png" class="provider-logo" alt="Pragmatic">
-        <img src="https://www.pgsoft.com/images/common/logo.png" class="provider-logo" alt="PGSoft">
-        <img src="https://habanerosystems.com/images/logo.png" class="provider-logo" alt="Habanero">
-        <img src="https://www.evolution.com/sites/default/files/evolution_logo_white.png" class="provider-logo" alt="Evolution">
-        <img src="https://playngonewsroom.com/wp-content/uploads/2021/03/PNG-Logo-White.png" class="provider-logo" alt="PlaynGo">
+<div class="game-container">
+    <div class="prize-under">
+        <h2 id="prizeText">¡SIGUE INTENTANDO!</h2>
+        <p id="prizeSubtext">Suerte para la próxima</p>
     </div>
+    <canvas id="scratchCanvas" width="320" height="180"></canvas>
+</div>
 
-    <div class="chat-float">
-        <span class="material-icons-outlined" style="color:white">chat</span>
+<div class="stats">
+    Intentos realizados: <span id="attemptsDisplay">0</span> / 20
+</div>
+
+<div id="winModal">
+    <div class="modal-card">
+        <h2>¡FELICIDADES!</h2>
+        <div class="chips">5.000</div>
+        <p>FICHAS NO EXTRAÍBLES</p>
+        <p style="font-size: 12px; color: #666;">Acreditadas en tu cuenta</p>
+        <button onclick="resetGame()">ACEPTAR</button>
     </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('scratchCanvas');
+    const ctx = canvas.getContext('2d');
+    const attemptsDisplay = document.getElementById('attemptsDisplay');
+    const prizeText = document.getElementById('prizeText');
+    const prizeSubtext = document.getElementById('prizeSubtext');
+    const winModal = document.getElementById('winModal');
+
+    let attempts = 0;
+    let isDrawing = false;
+    let scrapedPixels = 0;
+    const threshold = 60; // Porcentaje para considerar "raspado"
+
+    function initCanvas() {
+        // Rellenar con patrón de raspado (Gris con logo)
+        ctx.fillStyle = '#777';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Añadir texto de guía
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 20px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('RASPA AQUÍ', canvas.width/2, canvas.height/2 + 7);
+        
+        // Modo "borrador" para el raspado
+        ctx.globalCompositeOperation = 'destination-out';
+    }
+
+    function handleMove(e) {
+        if (!isDrawing) return;
+        
+        const rect = canvas.getBoundingClientRect();
+        const x = (e.clientX || e.touches[0].clientX) - rect.left;
+        const y = (e.clientY || e.touches[0].clientY) - rect.top;
+
+        ctx.beginPath();
+        ctx.arc(x, y, 20, 0, Math.PI * 2);
+        ctx.fill();
+        checkScrapePercentage();
+    }
+
+    function checkScrapePercentage() {
+        // Calculamos cuánto se ha raspado
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        let transparent = 0;
+        for (let i = 3; i < imageData.data.length; i += 4) {
+            if (imageData.data[i] === 0) transparent++;
+        }
+        
+        const percent = (transparent / (canvas.width * canvas.height)) * 100;
+        
+        if (percent > threshold && isDrawing) {
+            finishAttempt();
+        }
+    }
+
+    function finishAttempt() {
+        isDrawing = false;
+        attempts++;
+        attemptsDisplay.innerText = attempts;
+
+        // Lógica de premio en el intento 20
+        if (attempts === 20) {
+            prizeText.innerText = "¡PREMIO MAYOR!";
+            prizeSubtext.innerText = "5K FICHAS GANADAS";
+            setTimeout(() => {
+                winModal.style.display = 'flex';
+            }, 500);
+        } else {
+            setTimeout(() => {
+                alert("No hubo suerte. Intento " + attempts + " de 20.");
+                resetCanvasOnly();
+            }, 300);
+        }
+    }
+
+    function resetCanvasOnly() {
+        ctx.globalCompositeOperation = 'source-over';
+        initCanvas();
+    }
+
+    function resetGame() {
+        attempts = 0;
+        attemptsDisplay.innerText = "0";
+        winModal.style.display = 'none';
+        prizeText.innerText = "¡SIGUE INTENTANDO!";
+        prizeSubtext.innerText = "Suerte para la próxima";
+        resetCanvasOnly();
+    }
+
+    canvas.addEventListener('mousedown', () => isDrawing = true);
+    canvas.addEventListener('touchstart', () => isDrawing = true);
+    window.addEventListener('mouseup', () => isDrawing = false);
+    window.addEventListener('touchend', () => isDrawing = false);
+    canvas.addEventListener('mousemove', handleMove);
+    canvas.addEventListener('touchmove', handleMove);
+
+    window.onload = initCanvas;
+</script>
 
 </body>
 </html>
