@@ -11,8 +11,7 @@
 :root{--gold:#d4af37;--pink:#ff3399;}
 
 html,body{
-    margin:0;
-    height:100%;
+    margin:0;height:100%;
     font-family:'Segoe UI',sans-serif;
     background:#000;
     overflow:hidden;
@@ -20,33 +19,23 @@ html,body{
     touch-action:none;
 }
 
-/* FONDO CASINO */
 .background{
-    position:fixed;
-    inset:0;
+    position:fixed;inset:0;
     background:url('https://images.unsplash.com/photo-1606166325683-e1e2e6a3b7fa?q=80&w=2070') center/cover no-repeat;
     filter:brightness(.35);
     z-index:-1;
 }
 
-/* GANADORES */
 .top-winners{
-    position:absolute;
-    top:0;
-    width:100%;
+    position:absolute;top:0;width:100%;
     background:rgba(0,0,0,.85);
     border-bottom:1px solid var(--gold);
     padding:10px;
     color:#f1c40f;
-    display:flex;
-    justify-content:center;
-    gap:25px;
-    font-size:13px;
-    font-weight:700;
-    z-index:10;
+    display:flex;justify-content:center;gap:25px;
+    font-size:13px;font-weight:700;
 }
 
-/* CONTENEDOR */
 .main-container{
     height:100vh;
     display:flex;
@@ -55,39 +44,26 @@ html,body{
     align-items:center;
 }
 
-/* LOGO */
-.logo-area{text-align:center;margin-bottom:30px;}
-.logo-area h1{
-    color:#fff;
-    font-size:60px;
-    font-weight:900;
-    margin:0;
-}
+.logo-area{text-align:center;margin-bottom:25px;}
+.logo-area h1{color:#fff;font-size:60px;font-weight:900;margin:0;}
 .logo-area h1 span{color:var(--pink);font-style:italic;font-weight:300;}
 .logo-area p{color:var(--gold);letter-spacing:5px;font-weight:700;}
 
-/* TARJETA */
 .card-frame{
-    padding:12px;
-    background:#1a1a1a;
+    padding:12px;background:#1a1a1a;
     border:3px solid var(--gold);
     border-radius:40px;
     box-shadow:0 0 40px var(--pink);
-    width:480px;
-    height:260px;
+    width:480px;height:260px;
     max-width:90vw;
 }
 
 .card-inner{
-    width:100%;
-    height:100%;
+    width:100%;height:100%;
     border-radius:30px;
     background:#000 url('https://www.transparenttextures.com/patterns/dark-leather.png');
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    position:relative;
-    overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+    position:relative;overflow:hidden;
 }
 
 .prize-value{
@@ -97,17 +73,26 @@ html,body{
 }
 
 #scratch-canvas{
-    position:absolute;
-    inset:0;
-    cursor:crosshair;
+    position:absolute;inset:0;
     touch-action:none;
 }
 
-/* MODALES */
+.retry-btn{
+    margin-top:20px;
+    padding:14px 40px;
+    font-size:16px;
+    font-weight:900;
+    border-radius:30px;
+    border:none;
+    cursor:pointer;
+    background:linear-gradient(#f1c40f,#d4af37);
+    color:#000;
+    display:none;
+}
+
 #win-modal,#block-modal{
     display:none;
-    position:fixed;
-    inset:0;
+    position:fixed;inset:0;
     background:rgba(0,0,0,.95);
     z-index:100;
     justify-content:center;
@@ -152,6 +137,8 @@ html,body{
 <canvas id="scratch-canvas" width="480" height="260"></canvas>
 </div>
 </div>
+
+<button class="retry-btn" id="retryBtn" onclick="location.reload()">PROBAR DE NUEVO</button>
 </div>
 
 <div id="win-modal">
@@ -165,44 +152,45 @@ html,body{
 <div id="block-modal">
 <div class="modal-content">
 <h2>LÍMITE ALCANZADO</h2>
-<p>Ya usaste tus 3 intentos.<br>Volvé más tarde.</p>
+<p>Ya usaste tus 3 intentos.</p>
 </div>
 </div>
 
 <script>
-const MAX_INTENTOS = 3;
-const STORAGE_KEY = "bet30_raspadita";
+const MAX_INTENTOS=3;
+const STORAGE_KEY="bet30_raspadita";
 
-let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
-    intentos:0,
-    ganador:false,
-    codigo:null,
-    fecha:null
+let data=JSON.parse(localStorage.getItem(STORAGE_KEY))||{
+    intentos:0,ganador:false,codigo:null,fecha:null
 };
 
-const canvas = document.getElementById("scratch-canvas");
-const ctx = canvas.getContext("2d");
-const prizeText = document.getElementById("prizeText");
-const winModal = document.getElementById("win-modal");
-const blockModal = document.getElementById("block-modal");
-const winInfo = document.getElementById("winInfo");
+const canvas=document.getElementById("scratch-canvas");
+const ctx=canvas.getContext("2d");
+const prizeText=document.getElementById("prizeText");
+const retryBtn=document.getElementById("retryBtn");
+const winModal=document.getElementById("win-modal");
+const blockModal=document.getElementById("block-modal");
+const winInfo=document.getElementById("winInfo");
 
-if(data.intentos >= MAX_INTENTOS){
+if(data.intentos>=MAX_INTENTOS){
     blockModal.style.display="flex";
     canvas.style.display="none";
+}else{
+    retryBtn.style.display="block";
 }
 
-const hasPrize = data.ganador || (!data.ganador && Math.floor(Math.random()*20)===0);
-prizeText.innerText = hasPrize ? "5.000" : "SIN PREMIO";
+const hasPrize=data.ganador||(!data.ganador&&Math.floor(Math.random()*20)===0);
+prizeText.innerText=hasPrize?"5.000":"SIN PREMIO";
 
 function init(){
     ctx.globalCompositeOperation="source-over";
     ctx.fillStyle="#bfc3c7";
-    ctx.fillRect(0,0,480,260);
+    ctx.fillRect(0,0,canvas.width,canvas.height);
     ctx.fillStyle="rgba(0,0,0,.35)";
     ctx.font="bold 32px Arial";
     ctx.textAlign="center";
-    ctx.fillText("RASPA AQUÍ",240,145);
+    ctx.textBaseline="middle";
+    ctx.fillText("RASPA AQUÍ",canvas.width/2,canvas.height/2);
     ctx.globalCompositeOperation="destination-out";
     ctx.lineWidth=45;
     ctx.lineCap="round";
@@ -211,7 +199,7 @@ function init(){
 let drawing=false,lastX=null,lastY=null,finished=false;
 
 function scratch(e){
-    if(!drawing||finished) return;
+    if(!drawing||finished)return;
     const r=canvas.getBoundingClientRect();
     const x=(e.clientX||e.touches[0].clientX)-r.left;
     const y=(e.clientY||e.touches[0].clientY)-r.top;
@@ -224,9 +212,9 @@ function scratch(e){
 }
 
 function check(){
-    const img=ctx.getImageData(0,0,480,260).data;
+    const img=ctx.getImageData(0,0,canvas.width,canvas.height).data;
     let clear=0;
-    for(let i=3;i<img.length;i+=4) if(img[i]===0) clear++;
+    for(let i=3;i<img.length;i+=4)if(img[i]===0)clear++;
     if(clear/(img.length/4)>=0.6){
         finished=true;
         reveal();
@@ -237,8 +225,9 @@ function reveal(){
     data.intentos++;
     localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
     canvas.style.opacity=0;
+    retryBtn.style.display="none";
 
-    if(hasPrize && !data.ganador){
+    if(hasPrize&&!data.ganador){
         data.ganador=true;
         data.codigo=genCode();
         data.fecha=new Date().toLocaleString("es-AR");
@@ -251,39 +240,25 @@ function reveal(){
     }else{
         alert("No hubo premio esta vez.");
         if(data.intentos>=MAX_INTENTOS) blockModal.style.display="flex";
+        else retryBtn.style.display="block";
     }
 }
 
 function genCode(){
     const l="ABCDEFGHIJKLMNOPQRSTUVWXYZ",n="0123456789";
     let c="";
-    for(let i=0;i<4;i++) c+=l[Math.floor(Math.random()*l.length)];
-    for(let i=0;i<3;i++) c+=n[Math.floor(Math.random()*n.length)];
+    for(let i=0;i<4;i++)c+=l[Math.floor(Math.random()*l.length)];
+    for(let i=0;i<3;i++)c+=n[Math.floor(Math.random()*n.length)];
     return c;
 }
 
-/* EVENTOS PC */
+/* EVENTOS */
 canvas.addEventListener("mousedown",e=>{drawing=true;scratch(e);});
 canvas.addEventListener("mousemove",scratch);
 window.addEventListener("mouseup",()=>{drawing=false;lastX=null;});
-
-/* EVENTOS MOBILE FIX */
-canvas.addEventListener("touchstart",e=>{
-    e.preventDefault();
-    drawing=true;
-    scratch(e);
-},{passive:false});
-
-canvas.addEventListener("touchmove",e=>{
-    e.preventDefault();
-    scratch(e);
-},{passive:false});
-
-canvas.addEventListener("touchend",e=>{
-    e.preventDefault();
-    drawing=false;
-    lastX=null;lastY=null;
-},{passive:false});
+canvas.addEventListener("touchstart",e=>{e.preventDefault();drawing=true;scratch(e);},{passive:false});
+canvas.addEventListener("touchmove",e=>{e.preventDefault();scratch(e);},{passive:false});
+canvas.addEventListener("touchend",e=>{e.preventDefault();drawing=false;lastX=null;},{passive:false});
 
 init();
 </script>
