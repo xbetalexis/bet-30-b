@@ -1,266 +1,288 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bet30 VIP - Raspadita Premium</title>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <style>
-        :root {
-            --gold: #d4af37;
-            --pink: #ff3399;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bet30 VIP - Raspadita Premium</title>
 
-        body, html {
-            margin: 0; padding: 0;
-            height: 100%; width: 100%;
-            font-family: 'Segoe UI', sans-serif;
-            overflow: hidden;
-            background-color: #000;
-        }
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-        /* FONDO DE CASINO REAL (IGUAL A LA IMAGEN) */
-        .background {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://images.unsplash.com/photo-1596838132731-3301c3fd4317?q=80&w=2070') center/cover;
-            filter: brightness(0.3) blur(2px);
-            z-index: -1;
-        }
+<style>
+:root{
+    --gold:#d4af37;
+    --pink:#ff3399;
+}
 
-        /* MARQUESINA DE GANADORES */
-        .top-winners {
-            position: absolute;
-            top: 0; width: 100%;
-            background: rgba(0,0,0,0.85);
-            border-bottom: 1px solid var(--gold);
-            padding: 10px 0;
-            color: #f1c40f;
-            font-size: 13px;
-            font-weight: bold;
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            z-index: 10;
-        }
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    font-family:'Segoe UI',sans-serif;
+    background:#000;
+    overflow:hidden;
+}
 
-        .main-container {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
+/* FONDO CASINO REAL */
+.background{
+    position:fixed;
+    inset:0;
+    background:url('https://images.unsplash.com/photo-1606166325683-e1e2e6a3b7fa?q=80&w=2070') center/cover no-repeat;
+    filter:brightness(0.35);
+    z-index:-1;
+}
 
-        .logo-area { text-align: center; margin-bottom: 30px; }
-        .logo-area h1 { 
-            color: white; font-size: 65px; margin: 0; font-weight: 900;
-            text-shadow: 0 0 15px rgba(255,255,255,0.3);
-        }
-        .logo-area h1 span { color: var(--pink); font-style: italic; font-weight: 300; margin-left: 10px; }
-        .logo-area p { color: var(--gold); letter-spacing: 5px; font-weight: bold; margin: 0; font-size: 18px; }
+/* GANADORES */
+.top-winners{
+    position:absolute;
+    top:0;
+    width:100%;
+    background:rgba(0,0,0,.85);
+    border-bottom:1px solid var(--gold);
+    padding:10px 0;
+    color:#f1c40f;
+    font-size:13px;
+    font-weight:700;
+    display:flex;
+    justify-content:center;
+    gap:30px;
+    z-index:10;
+}
 
-        /* TARJETA CON NEÓN ROSA */
-        .card-frame {
-            position: relative;
-            padding: 12px;
-            background: #1a1a1a;
-            border: 3px solid var(--gold);
-            border-radius: 40px;
-            box-shadow: 0 0 40px var(--pink);
-            width: 480px;
-            height: 260px;
-        }
+/* CONTENEDOR */
+.main-container{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
 
-        .card-inner {
-            width: 100%; height: 100%;
-            background: #000 url('https://www.transparenttextures.com/patterns/dark-leather.png');
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
+/* LOGO */
+.logo-area{text-align:center;margin-bottom:30px;}
+.logo-area h1{
+    color:#fff;
+    font-size:65px;
+    margin:0;
+    font-weight:900;
+    text-shadow:0 0 15px rgba(255,255,255,.3);
+}
+.logo-area h1 span{
+    color:var(--pink);
+    font-style:italic;
+    font-weight:300;
+}
+.logo-area p{
+    color:var(--gold);
+    letter-spacing:5px;
+    font-weight:700;
+}
 
-        .prize-value { color: var(--gold); font-size: 85px; font-weight: 900; }
+/* TARJETA */
+.card-frame{
+    padding:12px;
+    background:#1a1a1a;
+    border:3px solid var(--gold);
+    border-radius:40px;
+    box-shadow:0 0 40px var(--pink);
+    width:480px;
+    height:260px;
+}
 
-        #scratch-canvas {
-            position: absolute;
-            top: 0; left: 0;
-            z-index: 20;
-            cursor: crosshair;
-            touch-action: none;
-        }
+.card-inner{
+    width:100%;
+    height:100%;
+    border-radius:30px;
+    background:#000 url('https://www.transparenttextures.com/patterns/dark-leather.png');
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    overflow:hidden;
+}
 
-        /* MODAL DE VICTORIA */
-        #win-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 100;
-            justify-content: center;
-            align-items: center;
-        }
+.prize-value{
+    color:var(--gold);
+    font-size:85px;
+    font-weight:900;
+}
 
-        .modal-content {
-            background: #111;
-            border: 2px solid var(--gold);
-            border-radius: 30px;
-            padding: 50px;
-            text-align: center;
-            box-shadow: 0 0 60px var(--pink);
-        }
+/* CANVAS */
+#scratch-canvas{
+    position:absolute;
+    inset:0;
+    cursor:crosshair;
+    touch-action:none;
+}
 
-        .modal-content h2 { color: var(--pink); font-size: 40px; margin: 0; font-style: italic; }
-        .modal-content .big-num { color: white; font-size: 80px; font-weight: 900; margin: 15px 0; }
-        .modal-content button {
-            background: linear-gradient(to bottom, #f1c40f, #d4af37);
-            color: black; border: none; padding: 15px 50px;
-            border-radius: 30px; font-weight: 900; cursor: pointer; font-size: 18px;
-            margin-top: 20px;
-        }
-    </style>
+/* MODAL */
+#win-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.95);
+    z-index:100;
+    justify-content:center;
+    align-items:center;
+}
+
+.modal-content{
+    background:#111;
+    border:2px solid var(--gold);
+    border-radius:30px;
+    padding:50px;
+    text-align:center;
+    box-shadow:0 0 60px var(--pink);
+}
+
+.modal-content h2{
+    color:var(--pink);
+    font-size:40px;
+    font-style:italic;
+}
+.modal-content .big-num{
+    color:#fff;
+    font-size:80px;
+    font-weight:900;
+}
+.modal-content button{
+    background:linear-gradient(#f1c40f,#d4af37);
+    border:none;
+    padding:15px 50px;
+    border-radius:30px;
+    font-weight:900;
+    cursor:pointer;
+    font-size:18px;
+}
+</style>
 </head>
+
 <body>
 
 <div class="background"></div>
 
 <div class="top-winners">
-    <span>★ Usuar123 ganó $2.500</span>
-    <span>★ Joker123 ganó $5.000</span>
-    <span>★ JokerKing ganó $5.000</span>
-    <span>★ Joka128 ganó $5.000</span>
+<span>★ LucasM ganó $2.500</span>
+<span>★ Nico88 ganó $5.000</span>
+<span>★ MatiG ganó $5.000</span>
+<span>★ FerPlay ganó $2.500</span>
 </div>
 
 <div class="main-container">
-    <div class="logo-area">
-        <h1>BET30<span>VIP</span></h1>
-        <p>PREMIO EXCLUSIVO</p>
-    </div>
+<div class="logo-area">
+<h1>BET30 <span>VIP</span></h1>
+<p>PREMIO EXCLUSIVO</p>
+</div>
 
-    <div class="card-frame">
-        <div class="card-inner">
-            <div class="prize-value" id="prize-display">5.000</div>
-            <canvas id="scratch-canvas" width="480" height="260"></canvas>
-        </div>
-    </div>
+<div class="card-frame">
+<div class="card-inner">
+<div class="prize-value">5.000</div>
+<canvas id="scratch-canvas" width="480" height="260"></canvas>
+</div>
+</div>
 </div>
 
 <div id="win-modal">
-    <div class="modal-content">
-        <h2>¡GANANCIA ÉPICA!</h2>
-        <div class="big-num">5.000</div>
-        <p style="color:var(--gold)">FICHAS NO EXTRAÍBLES</p>
-        <button onclick="closeWin()">COBRAR PREMIO</button>
-    </div>
+<div class="modal-content">
+<h2>¡GANANCIA ÉPICA!</h2>
+<div class="big-num">5.000</div>
+<p style="color:var(--gold)">FICHAS NO EXTRAÍBLES</p>
+<button onclick="closeWin()">COBRAR PREMIO</button>
+</div>
 </div>
 
 <script>
-    const canvas = document.getElementById('scratch-canvas');
-    const ctx = canvas.getContext('2d');
-    const winModal = document.getElementById('win-modal');
-    
-    let attempts = 0;
-    let isDrawing = false;
-    let hasFinishedCurrent = false;
+const canvas = document.getElementById("scratch-canvas");
+const ctx = canvas.getContext("2d");
+const winModal = document.getElementById("win-modal");
 
-    function init() {
-        hasFinishedCurrent = false;
-        // Capa plateada de raspado
-        ctx.globalCompositeOperation = 'source-over';
-        const grad = ctx.createLinearGradient(0, 0, 480, 260);
-        grad.addColorStop(0, '#adb5bd');
-        grad.addColorStop(0.5, '#dee2e6');
-        grad.addColorStop(1, '#6c757d');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, 480, 260);
+let attempts = 0;
+let drawing = false;
+let finished = false;
 
-        // Texto guía
-        ctx.fillStyle = "rgba(0,0,0,0.3)";
-        ctx.font = "bold 35px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText("RASPA AQUÍ", 240, 145);
+function init(){
+    finished=false;
+    ctx.globalCompositeOperation="source-over";
+    const g=ctx.createLinearGradient(0,0,480,260);
+    g.addColorStop(0,"#adb5bd");
+    g.addColorStop(.5,"#dee2e6");
+    g.addColorStop(1,"#6c757d");
+    ctx.fillStyle=g;
+    ctx.fillRect(0,0,480,260);
 
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.lineWidth = 45;
-        ctx.lineCap = 'round';
+    ctx.fillStyle="rgba(0,0,0,.3)";
+    ctx.font="bold 35px Arial";
+    ctx.textAlign="center";
+    ctx.fillText("RASPA AQUÍ",240,145);
+
+    ctx.globalCompositeOperation="destination-out";
+    ctx.lineWidth=45;
+    ctx.lineCap="round";
+}
+
+function scratch(e){
+    if(!drawing||finished) return;
+    const r=canvas.getBoundingClientRect();
+    const x=(e.clientX||e.touches[0].clientX)-r.left;
+    const y=(e.clientY||e.touches[0].clientY)-r.top;
+
+    ctx.beginPath();
+    ctx.moveTo(lastX||x,lastY||y);
+    ctx.lineTo(x,y);
+    ctx.stroke();
+    lastX=x; lastY=y;
+
+    checkProgress();
+}
+
+function checkProgress(){
+    const img=ctx.getImageData(0,0,480,260);
+    let cleared=0;
+    for(let i=3;i<img.data.length;i+=4){
+        if(img.data[i]===0) cleared++;
     }
+    const percent = cleared / (img.data.length/4);
 
-    function scratch(e) {
-        if (!isDrawing || hasFinishedCurrent) return;
-        
-        const rect = canvas.getBoundingClientRect();
-        const x = (e.clientX || e.touches[0].clientX) - rect.left;
-        const y = (e.clientY || e.touches[0].clientY) - rect.top;
-
-        ctx.beginPath();
-        if (this.lastX && this.lastY) {
-            ctx.moveTo(this.lastX, this.lastY);
-            ctx.lineTo(x, y);
-        } else {
-            ctx.moveTo(x, y);
-            ctx.lineTo(x, y);
-        }
-        ctx.stroke();
-        this.lastX = x;
-        this.lastY = y;
-        
-        checkProgress();
+    if(percent >= 0.60){
+        finished=true;
+        finishAttempt();
     }
+}
 
-    function checkProgress() {
-        const pixels = ctx.getImageData(0, 0, 480, 260).data;
-        let transparent = 0;
-        // Saltamos de 40 en 40 para que sea rápido pero preciso
-        for (let i = 3; i < pixels.length; i += 40) {
-            if (pixels[i] === 0) transparent++;
-        }
-        
-        // Solo decide el premio si se raspó el 50% (aprox 3120 puntos en este loop)
-        if (transparent > 1560) {
-            hasFinishedCurrent = true;
-            finishAttempt();
-        }
+function finishAttempt(){
+    attempts++;
+    if(attempts===20){
+        canvas.style.opacity="0";
+        confetti({particleCount:220,spread:100,origin:{y:.6}});
+        setTimeout(()=>winModal.style.display="flex",700);
+    }else{
+        setTimeout(()=>{
+            alert("No hay premio esta vez. Probá de nuevo.");
+            reset();
+        },300);
     }
+}
 
-    function finishAttempt() {
-        attempts++;
-        if (attempts === 20) {
-            canvas.style.transition = "opacity 0.5s";
-            canvas.style.opacity = "0";
-            confetti({ particleCount: 200, spread: 90, origin: { y: 0.6 } });
-            setTimeout(() => { winModal.style.display = 'flex'; }, 800);
-        } else {
-            setTimeout(() => {
-                alert("¡No hay premio esta vez! Sigue intentando.");
-                reset();
-            }, 300);
-        }
-    }
-
-    function reset() {
-        this.lastX = null; this.lastY = null;
-        canvas.style.opacity = "1";
-        init();
-    }
-
-    function closeWin() {
-        attempts = 0;
-        winModal.style.display = 'none';
-        reset();
-    }
-
-    canvas.addEventListener('mousedown', (e) => { isDrawing = true; scratch(e); });
-    canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); });
-    window.addEventListener('mouseup', () => { isDrawing = false; this.lastX = null; });
-    window.addEventListener('touchend', () => { isDrawing = false; this.lastX = null; });
-    canvas.addEventListener('mousemove', scratch);
-    canvas.addEventListener('touchmove', (e) => { e.preventDefault(); scratch(e); }, {passive: false});
-
+function reset(){
+    lastX=null; lastY=null;
+    canvas.style.opacity="1";
     init();
+}
+
+function closeWin(){
+    attempts=0;
+    winModal.style.display="none";
+    reset();
+}
+
+let lastX,lastY;
+canvas.addEventListener("mousedown",e=>{drawing=true;scratch(e);});
+canvas.addEventListener("touchstart",e=>{drawing=true;scratch(e);});
+window.addEventListener("mouseup",()=>{drawing=false;lastX=null;});
+window.addEventListener("touchend",()=>{drawing=false;lastX=null;});
+canvas.addEventListener("mousemove",scratch);
+canvas.addEventListener("touchmove",e=>{e.preventDefault();scratch(e);},{passive:false});
+
+init();
 </script>
 
 </body>
