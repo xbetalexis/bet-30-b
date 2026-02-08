@@ -3,306 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bet30 - Casino Online</title>
+    <title>Bet30 - Suerte Navideña</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0f1215;
-            --sidebar-bg: #161a1e;
-            --accent-yellow: #ffc107;
-            --card-bg: #1c2127;
-            --text-gray: #9ba3af;
+            --bet-blue: #0a0b1e;
+            --bet-footer: #11142b;
+            --bet-pink: #e91e63;
+            --bet-gold: #ffc107;
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
-            background-color: var(--bg-dark);
+            background-color: var(--bet-blue);
             color: white;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
-        /* --- SIDEBAR LATERAL --- */
-        aside {
-            width: 240px;
-            background-color: var(--sidebar-bg);
-            display: flex;
-            flex-direction: column;
-            border-right: 1px solid #2d333b;
-        }
-
-        .logo-container {
-            padding: 20px;
-            text-align: center;
-        }
-
-        .logo-container h1 {
-            color: var(--accent-yellow);
-            font-size: 28px;
-            margin: 0;
-            font-style: italic;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .nav-menu {
-            flex: 1;
-            padding: 10px 0;
-            overflow-y: auto;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            padding: 12px 20px;
-            color: var(--text-gray);
-            text-decoration: none;
-            transition: 0.3s;
-            font-weight: 500;
-        }
-
-        .nav-item:hover, .nav-item.active {
-            background-color: #242a32;
-            color: white;
-            border-left: 4px solid var(--accent-yellow);
-        }
-
-        .nav-item .material-icons-outlined {
-            margin-right: 12px;
-            font-size: 22px;
-        }
-
-        /* --- CONTENIDO PRINCIPAL --- */
-        main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-        }
-
+        /* --- NAVBAR SUPERIOR --- */
         header {
-            background-color: var(--sidebar-bg);
-            padding: 12px 30px;
+            background-color: var(--bet-blue);
+            padding: 10px 20px;
             display: flex;
-            justify-content: flex-end;
             align-items: center;
-            gap: 15px;
-            border-bottom: 1px solid #2d333b;
-        }
-
-        .btn-login {
-            background: transparent;
-            color: white;
-            border: 1px solid #444;
-            padding: 8px 20px;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .btn-register {
-            background: var(--accent-yellow);
-            color: black;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* --- HERO BANNER --- */
-        .hero {
-            padding: 20px 30px;
-        }
-
-        .banner {
-            width: 100%;
-            height: 300px;
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://img.freepik.com/premium-photo/poker-table-with-chips-cards-dark-background-generative-ai_175880-2342.jpg');
-            background-size: cover;
-            background-position: center;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 40px;
-            box-sizing: border-box;
-            border-bottom: 4px solid var(--accent-yellow);
-        }
-
-        .banner h2 {
-            font-size: 36px;
-            margin: 0;
-            text-transform: uppercase;
-        }
-
-        .banner p {
-            color: var(--accent-yellow);
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        /* --- GRID DE JUEGOS --- */
-        .section-title {
-            padding: 0 30px;
-            display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        .game-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        .logo {
+            font-size: 32px;
+            font-weight: 900;
+            color: #ffffff;
+            text-decoration: none;
+        }
+        .logo span { color: var(--bet-pink); }
+
+        .nav-center {
+            display: flex;
             gap: 20px;
-            padding: 20px 30px;
         }
 
-        .game-card {
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            overflow: hidden;
-            transition: transform 0.3s;
-            cursor: pointer;
-            border: 1px solid #2d333b;
-        }
-
-        .game-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-yellow);
-        }
-
-        .game-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .game-info {
-            padding: 10px;
-            text-align: center;
+        .nav-link {
+            text-decoration: none;
+            color: white;
+            text-transform: uppercase;
             font-size: 14px;
             font-weight: bold;
+            padding: 5px 10px;
+        }
+        .nav-link.active {
+            border-bottom: 2px solid var(--bet-pink);
+            color: var(--bet-pink);
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            aside { width: 70px; }
-            .nav-item span:not(.material-icons-outlined) { display: none; }
-            .logo-container h1 { font-size: 16px; }
+        .btn-acceso {
+            background-color: var(--bet-pink);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        /* --- BANNER PRINCIPAL --- */
+        .hero-banner {
+            width: 100%;
+            height: 450px;
+            background: linear-gradient(to right, rgba(10,11,30,0.8), rgba(10,11,30,0.2)), 
+                        url('https://img.freepik.com/premium-photo/christmas-gifts-poker-cards-chips-blue-background_175880-1412.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-banner h1 {
+            font-size: 80px;
+            margin: 0;
+            line-height: 0.9;
+            text-transform: uppercase;
+        }
+        .hero-banner .pink-text {
+            color: var(--bet-pink);
+            font-size: 60px;
+        }
+        .hero-banner p {
+            font-size: 18px;
+            margin-top: 10px;
+            letter-spacing: 1px;
+        }
+
+        /* --- MENÚ DE CATEGORÍAS (ICONOS BLANCOS) --- */
+        .category-bar {
+            background-color: #050614;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-bottom: 2px solid #1a1c3a;
+        }
+
+        .cat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        .cat-item:hover, .cat-item.active {
+            opacity: 1;
+            color: var(--bet-pink);
+        }
+        .cat-item .material-icons-outlined {
+            font-size: 30px;
+            margin-bottom: 5px;
+        }
+
+        /* --- BARRA DE PROVEEDORES (ABAJO) --- */
+        .providers-bar {
+            background-color: var(--bet-footer);
+            padding: 15px 10px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .provider-logo {
+            height: 30px;
+            filter: grayscale(1) brightness(2);
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+        .provider-logo:hover {
+            filter: none;
+            opacity: 1;
+        }
+
+        /* --- BOTÓN FLOTANTE CHAT --- */
+        .chat-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #5c6bc0;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <aside>
-        <div class="logo-container">
-            <h1>BET30</h1>
+    <header>
+        <a href="#" class="logo">Bet<span>30</span></a>
+        <div class="nav-center">
+            <a href="#" class="nav-link active">Inicio</a>
+            <a href="#" class="nav-link">Casino</a>
         </div>
-        <nav class="nav-menu">
-            <a href="#" class="nav-item active">
-                <span class="material-icons-outlined">home</span>
-                <span>Inicio</span>
-            </a>
-            <a href="#" class="nav-item">
-                <span class="material-icons-outlined">sports_soccer</span>
-                <span>Deportes</span>
-            </a>
-            <a href="#" class="nav-item">
-                <span class="material-icons-outlined">casino</span>
-                <span>Casino</span>
-            </a>
-            <a href="#" class="nav-item">
-                <span class="material-icons-outlined">slot_machine</span>
-                <span>Slots</span>
-            </a>
-            <a href="#" class="nav-item">
-                <span class="material-icons-outlined">live_tv</span>
-                <span>Casino Vivo</span>
-            </a>
-            <a href="#" class="nav-item">
-                <span class="material-icons-outlined">military_tech</span>
-                <span>Torneos</span>
-            </a>
-            <a href="#" class="nav-item">
-                <span class="material-icons-outlined">help_outline</span>
-                <span>Soporte</span>
-            </a>
-        </nav>
-    </aside>
+        <button class="btn-acceso">Acceso</button>
+    </header>
 
-    <main>
-        <header>
-            <button class="btn-login">Ingresar</button>
-            <button class="btn-register">Registrarse</button>
-        </header>
+    <section class="hero-banner">
+        <div style="color:var(--bet-pink); font-weight:bold; font-size: 40px;">Bet<span>30</span></div>
+        <h1>SUERTE</h1>
+        <h1 class="pink-text">NAVIDEÑA ON</h1>
+        <p>JUGÁ, GANÁ Y REPETÍ LA MAGIA FESTIVA</p>
+    </section>
 
-        <section class="hero">
-            <div class="banner">
-                <h2>BONO BIENVENIDA</h2>
-                <p>HASTA 100% DE RECARGA EXTRA</p>
-                <button class="btn-register" style="width: fit-content; margin-top: 15px; padding: 12px 30px;">JUGAR AHORA</button>
-            </div>
-        </section>
+    <nav class="category-bar">
+        <a href="#" class="cat-item active">
+            <span class="material-icons-outlined">home</span>
+            Lobby
+        </a>
+        <a href="#" class="cat-item">
+            <span class="material-icons-outlined">workspace_premium</span>
+            Jokers
+        </a>
+        <a href="#" class="cat-item">
+            <span class="material-icons-outlined">local_fire_department</span>
+            Hot
+        </a>
+        <a href="#" class="cat-item">
+            <span class="material-icons-outlined">casino</span>
+            Megaways
+        </a>
+    </nav>
 
-        <div class="section-title">
-            <h3>Slots Populares</h3>
-            <a href="#" style="color: var(--accent-yellow); text-decoration: none; font-size: 14px;">Ver todos</a>
-        </div>
+    <div class="providers-bar">
+        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/5a/Pragmatic_Play_logo.svg/1200px-Pragmatic_Play_logo.svg.png" class="provider-logo" alt="Pragmatic">
+        <img src="https://www.pgsoft.com/images/common/logo.png" class="provider-logo" alt="PGSoft">
+        <img src="https://habanerosystems.com/images/logo.png" class="provider-logo" alt="Habanero">
+        <img src="https://www.evolution.com/sites/default/files/evolution_logo_white.png" class="provider-logo" alt="Evolution">
+        <img src="https://playngonewsroom.com/wp-content/uploads/2021/03/PNG-Logo-White.png" class="provider-logo" alt="PlaynGo">
+    </div>
 
-        <section class="game-grid">
-            <div class="game-card">
-                <img src="https://images.unsplash.com/photo-1596838132731-3301c3fd4317?auto=format&fit=crop&q=80&w=400" alt="Gates of Olympus">
-                <div class="game-info">Gates of Olympus</div>
-            </div>
-            <div class="game-card">
-                <img src="https://images.unsplash.com/photo-1518893063132-36e46dbe2428?auto=format&fit=crop&q=80&w=400" alt="Sweet Bonanza">
-                <div class="game-info">Sweet Bonanza</div>
-            </div>
-            <div class="game-card">
-                <img src="https://images.unsplash.com/photo-1606167668584-78701c57f13d?auto=format&fit=crop&q=80&w=400" alt="Sugar Rush">
-                <div class="game-info">Sugar Rush</div>
-            </div>
-            <div class="game-card">
-                <img src="https://images.unsplash.com/photo-1596838132731-3301c3fd4317?auto=format&fit=crop&q=80&w=400" alt="Big Bass">
-                <div class="game-info">Big Bass Bonanza</div>
-            </div>
-            <div class="game-card">
-                <img src="https://images.unsplash.com/photo-1518893063132-36e46dbe2428?auto=format&fit=crop&q=80&w=400" alt="Game">
-                <div class="game-info">Wolf Gold</div>
-            </div>
-            <div class="game-card">
-                <img src="https://images.unsplash.com/photo-1606167668584-78701c57f13d?auto=format&fit=crop&q=80&w=400" alt="Game">
-                <div class="game-info">The Dog House</div>
-            </div>
-        </section>
-
-        <div class="section-title">
-            <h3>Casino en Vivo</h3>
-        </div>
-
-        <section class="game-grid">
-            <div class="game-card">
-                <img src="https://images.unsplash.com/photo-1596838132731-3301c3fd4317?auto=format&fit=crop&q=80&w=400" alt="Roulette">
-                <div class="game-info">Ruleta Relámpago</div>
-            </div>
-            <div class="game-card">
-                <img src="https://images.unsplash.com/photo-1518893063132-36e46dbe2428?auto=format&fit=crop&q=80&w=400" alt="Blackjack">
-                <div class="game-info">Blackjack VIP</div>
-            </div>
-            <div class="game-card">
-                <img src="https://images.unsplash.com/photo-1606167668584-78701c57f13d?auto=format&fit=crop&q=80&w=400" alt="Crazy Time">
-                <div class="game-info">Crazy Time</div>
-            </div>
-            <div class="game-card">
-                <img src="https://images.unsplash.com/photo-1596838132731-3301c3fd4317?auto=format&fit=crop&q=80&w=400" alt="Baccarat">
-                <div class="game-info">Speed Baccarat</div>
-            </div>
-        </section>
-    </main>
+    <div class="chat-float">
+        <span class="material-icons-outlined" style="color:white">chat</span>
+    </div>
 
 </body>
 </html>
