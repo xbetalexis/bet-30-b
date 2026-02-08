@@ -8,155 +8,61 @@
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <style>
-:root{
-    --gold:#d4af37;
-    --pink:#ff3399;
-}
-
+:root{--gold:#d4af37;--pink:#ff3399;}
 html,body{
-    margin:0;
-    width:100%;
-    height:100%;
-    font-family:'Segoe UI',sans-serif;
-    background:#000;
-    overflow:hidden;
+    margin:0;height:100%;font-family:'Segoe UI',sans-serif;
+    background:#000;overflow:hidden;
 }
-
-/* FONDO CASINO REAL */
 .background{
-    position:fixed;
-    inset:0;
+    position:fixed;inset:0;
     background:url('https://images.unsplash.com/photo-1606166325683-e1e2e6a3b7fa?q=80&w=2070') center/cover no-repeat;
-    filter:brightness(0.35);
-    z-index:-1;
+    filter:brightness(.35);z-index:-1;
 }
-
-/* GANADORES */
 .top-winners{
-    position:absolute;
-    top:0;
-    width:100%;
+    position:absolute;top:0;width:100%;
     background:rgba(0,0,0,.85);
     border-bottom:1px solid var(--gold);
-    padding:10px 0;
-    color:#f1c40f;
-    font-size:13px;
-    font-weight:700;
-    display:flex;
-    justify-content:center;
-    gap:30px;
-    z-index:10;
+    padding:10px;color:#f1c40f;
+    display:flex;justify-content:center;gap:30px;
+    font-size:13px;font-weight:700;
 }
-
-/* CONTENEDOR */
 .main-container{
-    height:100vh;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
+    height:100vh;display:flex;
+    flex-direction:column;justify-content:center;align-items:center;
 }
-
-/* LOGO */
 .logo-area{text-align:center;margin-bottom:30px;}
-.logo-area h1{
-    color:#fff;
-    font-size:65px;
-    margin:0;
-    font-weight:900;
-    text-shadow:0 0 15px rgba(255,255,255,.3);
-}
-.logo-area h1 span{
-    color:var(--pink);
-    font-style:italic;
-    font-weight:300;
-}
-.logo-area p{
-    color:var(--gold);
-    letter-spacing:5px;
-    font-weight:700;
-}
+.logo-area h1{color:#fff;font-size:65px;font-weight:900;margin:0;}
+.logo-area h1 span{color:var(--pink);font-style:italic;font-weight:300;}
+.logo-area p{color:var(--gold);letter-spacing:5px;font-weight:700;}
 
-/* TARJETA */
 .card-frame{
-    padding:12px;
-    background:#1a1a1a;
+    padding:12px;background:#1a1a1a;
     border:3px solid var(--gold);
-    border-radius:40px;
-    box-shadow:0 0 40px var(--pink);
-    width:480px;
-    height:260px;
+    border-radius:40px;box-shadow:0 0 40px var(--pink);
+    width:480px;height:260px;
 }
-
 .card-inner{
-    width:100%;
-    height:100%;
-    border-radius:30px;
+    width:100%;height:100%;border-radius:30px;
     background:#000 url('https://www.transparenttextures.com/patterns/dark-leather.png');
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    position:relative;
-    overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+    position:relative;overflow:hidden;
 }
+.prize-value{color:var(--gold);font-size:85px;font-weight:900;}
+#scratch-canvas{position:absolute;inset:0;cursor:crosshair;}
 
-.prize-value{
-    color:var(--gold);
-    font-size:85px;
-    font-weight:900;
-}
-
-#scratch-canvas{
-    position:absolute;
-    inset:0;
-    cursor:crosshair;
-    touch-action:none;
-}
-
-/* MODAL */
-#win-modal{
-    display:none;
-    position:fixed;
-    inset:0;
+#win-modal,#block-modal{
+    display:none;position:fixed;inset:0;
     background:rgba(0,0,0,.95);
-    z-index:100;
-    justify-content:center;
-    align-items:center;
+    z-index:100;justify-content:center;align-items:center;
 }
-
 .modal-content{
-    background:#111;
-    border:2px solid var(--gold);
-    border-radius:30px;
-    padding:50px;
-    text-align:center;
+    background:#111;border:2px solid var(--gold);
+    border-radius:30px;padding:50px;text-align:center;
     box-shadow:0 0 60px var(--pink);
 }
-
-.modal-content h2{
-    color:var(--pink);
-    font-size:40px;
-    font-style:italic;
-}
-.modal-content .big-num{
-    color:#fff;
-    font-size:80px;
-    font-weight:900;
-}
-.modal-content p{
-    color:var(--gold);
-    font-size:16px;
-}
-.modal-content button{
-    background:linear-gradient(#f1c40f,#d4af37);
-    border:none;
-    padding:15px 50px;
-    border-radius:30px;
-    font-weight:900;
-    cursor:pointer;
-    font-size:18px;
-    margin-top:20px;
-}
+.modal-content h2{color:var(--pink);font-size:38px;}
+.modal-content .big-num{color:#fff;font-size:80px;font-weight:900;}
+.modal-content p{color:var(--gold);font-size:16px;}
 </style>
 </head>
 
@@ -179,7 +85,7 @@ html,body{
 
 <div class="card-frame">
 <div class="card-inner">
-<div class="prize-value" id="prize-text"></div>
+<div class="prize-value" id="prizeText"></div>
 <canvas id="scratch-canvas" width="480" height="260"></canvas>
 </div>
 </div>
@@ -189,37 +95,46 @@ html,body{
 <div class="modal-content">
 <h2>¡GANASTE!</h2>
 <div class="big-num">5.000</div>
-<p id="win-info"></p>
-<button onclick="closeWin()">ACEPTAR</button>
+<p id="winInfo"></p>
+</div>
+</div>
+
+<div id="block-modal">
+<div class="modal-content">
+<h2>LÍMITE ALCANZADO</h2>
+<p>Ya usaste tus 3 intentos.<br>Volvé más tarde.</p>
 </div>
 </div>
 
 <script>
+const MAX_INTENTOS = 3;
+const STORAGE_KEY = "bet30_raspadita";
+
+let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+    intentos:0,
+    ganador:false,
+    codigo:null,
+    fecha:null
+};
+
 const canvas = document.getElementById("scratch-canvas");
 const ctx = canvas.getContext("2d");
-const prizeText = document.getElementById("prize-text");
+const prizeText = document.getElementById("prizeText");
 const winModal = document.getElementById("win-modal");
-const winInfo = document.getElementById("win-info");
+const blockModal = document.getElementById("block-modal");
+const winInfo = document.getElementById("winInfo");
 
-let drawing=false, finished=false, lastX=null, lastY=null;
+if(data.intentos >= MAX_INTENTOS){
+    blockModal.style.display="flex";
+    canvas.style.display="none";
+}
 
-/* 1 ganador cada 20 */
-const hasPrize = Math.floor(Math.random()*20) === 0;
-
-const prizeAmount = "5.000";
-const prizeCode = generateCode();
-const prizeDate = new Date().toLocaleString("es-AR");
-
-prizeText.innerText = hasPrize ? prizeAmount : "SIN PREMIO";
+const hasPrize = data.ganador || (!data.ganador && Math.floor(Math.random()*20)===0);
+prizeText.innerText = hasPrize ? "5.000" : "SIN PREMIO";
 
 function init(){
-    finished=false;
     ctx.globalCompositeOperation="source-over";
-    const g=ctx.createLinearGradient(0,0,480,260);
-    g.addColorStop(0,"#adb5bd");
-    g.addColorStop(.5,"#dee2e6");
-    g.addColorStop(1,"#6c757d");
-    ctx.fillStyle=g;
+    ctx.fillStyle="#bbb";
     ctx.fillRect(0,0,480,260);
     ctx.fillStyle="rgba(0,0,0,.35)";
     ctx.font="bold 32px Arial";
@@ -230,6 +145,8 @@ function init(){
     ctx.lineCap="round";
 }
 
+let drawing=false,lastX=null,lastY=null,finished=false;
+
 function scratch(e){
     if(!drawing||finished) return;
     const r=canvas.getBoundingClientRect();
@@ -239,54 +156,52 @@ function scratch(e){
     ctx.moveTo(lastX||x,lastY||y);
     ctx.lineTo(x,y);
     ctx.stroke();
-    lastX=x; lastY=y;
-    checkProgress();
+    lastX=x;lastY=y;
+    check();
 }
 
-function checkProgress(){
+function check(){
     const img=ctx.getImageData(0,0,480,260).data;
-    let cleared=0;
-    for(let i=3;i<img.length;i+=4){
-        if(img[i]===0) cleared++;
-    }
-    if(cleared/(img.length/4)>=0.6){
+    let clear=0;
+    for(let i=3;i<img.length;i+=4) if(img[i]===0) clear++;
+    if(clear/(img.length/4)>=0.6){
         finished=true;
-        revealResult();
+        reveal();
     }
 }
 
-function revealResult(){
-    canvas.style.opacity="0";
-    if(hasPrize){
+function reveal(){
+    data.intentos++;
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+    canvas.style.opacity=0;
+
+    if(hasPrize && !data.ganador){
+        data.ganador=true;
+        data.codigo=genCode();
+        data.fecha=new Date().toLocaleString("es-AR");
+        localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
         confetti({particleCount:300,spread:120,origin:{y:.6}});
         winInfo.innerHTML=`FICHAS NO EXTRAÍBLES<br><br>
-        <b>Fecha:</b> ${prizeDate}<br>
-        <b>Código:</b> ${prizeCode}`;
-        setTimeout(()=>winModal.style.display="flex",600);
+        <b>Fecha:</b> ${data.fecha}<br>
+        <b>Código:</b> ${data.codigo}`;
+        winModal.style.display="flex";
     }else{
-        setTimeout(()=>alert("No hubo premio esta vez. Seguí participando."),400);
+        alert("No hubo premio esta vez.");
+        if(data.intentos>=MAX_INTENTOS) blockModal.style.display="flex";
     }
 }
 
-function closeWin(){
-    winModal.style.display="none";
-}
-
-function generateCode(){
-    const l="ABCDEFGHIJKLMNOPQRSTUVWXYZ", n="0123456789";
-    let c="";
-    for(let i=0;i<4;i++) c+=l[Math.floor(Math.random()*l.length)];
-    for(let i=0;i<3;i++) c+=n[Math.floor(Math.random()*n.length)];
+function genCode(){
+    const l="ABCDEFGHIJKLMNOPQRSTUVWXYZ",n="0123456789";
+    let c="";for(let i=0;i<4;i++)c+=l[Math.floor(Math.random()*l.length)];
+    for(let i=0;i<3;i++)c+=n[Math.floor(Math.random()*n.length)];
     return c;
 }
 
 canvas.addEventListener("mousedown",e=>{drawing=true;scratch(e);});
 canvas.addEventListener("touchstart",e=>{drawing=true;scratch(e);});
 window.addEventListener("mouseup",()=>{drawing=false;lastX=null;});
-window.addEventListener("touchend",()=>{drawing=false;lastX=null;});
 canvas.addEventListener("mousemove",scratch);
-canvas.addEventListener("touchmove",e=>{e.preventDefault();scratch(e);},{passive:false});
-
 init();
 </script>
 
